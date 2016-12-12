@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 12:52:57 by ygaude            #+#    #+#             */
-/*   Updated: 2016/12/11 20:45:15 by ygaude           ###   ########.fr       */
+/*   Updated: 2016/12/12 13:47:22 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "get_next_line.h"
-#include "libft/libft.h"
+#include "libft.h"
 
 char		*ft_strappend(char *s1, char *s2)
 {
@@ -35,18 +35,23 @@ static char	*read_ln(int fd)
 	char		*res;
 	char		*tmp;
 
-	if (!buf)
-		buf = (char *)malloc(sizeof(char) * (BUFF_SIZE + 1));
 	res = ft_strnew(1);
 	tmp = NULL;
 	len = 0;
+	if (!buf)
+		buf = (char *)malloc(sizeof(char) * (BUFF_SIZE + 1));
+	else	
+	{
+		tmp = ft_strchr(buf, '\n');
+		res = ft_strappend(res, buf);
+	}
 	while (buf && !tmp)
 	{
-ft_putendl("TIG");
-		buf[len] = '\0';
-		res = ft_strappend(res, buf);
+ft_putendl("test");
 		len = read(fd, buf, BUFF_SIZE);
 		tmp = ft_strchr(buf, '\n');
+		res = ft_strappend(res, buf);
+		buf[len] = '\0';
 	}
 	ft_memmove(buf, tmp, ft_strlen(tmp));
 	tmp = ft_strchr(res, '\n');
