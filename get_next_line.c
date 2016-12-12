@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 12:52:57 by ygaude            #+#    #+#             */
-/*   Updated: 2016/12/12 13:47:22 by ygaude           ###   ########.fr       */
+/*   Updated: 2016/12/12 17:28:05 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,54 +28,45 @@ char		*ft_strappend(char *s1, char *s2)
 	return (res);
 }
 
-static char	*read_ln(int fd)
+int		get_next_line(const int fd, char **line)
 {
 	ssize_t		len;
 	static char	*buf = NULL;
-	char		*res;
 	char		*tmp;
 
-	res = ft_strnew(1);
+	*line = ft_strnew(1);
 	tmp = NULL;
 	len = 0;
 	if (!buf)
 		buf = (char *)malloc(sizeof(char) * (BUFF_SIZE + 1));
-	else	
+	else
+		*line = ft_strappend(*line, buf);
+	while (buf && !tmp && (len = read(fd, buf, BUFF_SIZE)) && len != -1)
 	{
 		tmp = ft_strchr(buf, '\n');
-		res = ft_strappend(res, buf);
-	}
-	while (buf && !tmp)
-	{
-ft_putendl("test");
-		len = read(fd, buf, BUFF_SIZE);
-		tmp = ft_strchr(buf, '\n');
-		res = ft_strappend(res, buf);
+		*line = ft_strappend(*line, buf);
 		buf[len] = '\0';
 	}
-	ft_memmove(buf, tmp, ft_strlen(tmp));
-	tmp = ft_strchr(res, '\n');
+	if (len == -1)
+		return (-1);
+	if (!len && !tmp)
+		return (0);
+	ft_memmove(buf, tmp + 1, ft_strlen(tmp));
+	tmp = ft_strchr(*line, '\n');
 	if (tmp)
 		*tmp = '\0';
-	return (res);
-}
-
-int		get_next_line(const int fd, char **line)
-{
-	*line = read_ln(fd);
 	return (1);
 }
 
 int		main(void)
 {
 	int		fd;
+	int		res;
 	char	*str;
 
 	if ((fd = open("test", O_RDONLY)) != -1)
 	{
-		if (get_next_line(fd, &str))
-			printf("|%s|\n", str);
-		if (get_next_line(fd, &str))
+		while ((res = get_next_line(fd, &str)) && res != -1)
 			printf("|%s|\n", str);
 	}
 	return (0);
