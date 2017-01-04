@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 12:52:57 by ygaude            #+#    #+#             */
-/*   Updated: 2016/12/13 06:13:24 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/01/04 19:57:31 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@
 #include "get_next_line.h"
 #include "libft/libft.h"
 
-char	*ft_strappend(char *s1, char *s2)
+void	ft_strappend(char **s1, char *s2)
 {
-	char	*res;
+	char	*tmp;
 
-	if (!s1 || !s2)
+	if (!*s1 || !s2)
 		return (NULL);
-	res = ft_strjoin(s1, s2);
-	free(s1);
-	return (res);
+	tmp = ft_strjoin(*s1, s2);
+	free(*s1);
+	*s1 = tmp;
 }
 
 char	*get_buf(const int fd, t_list *list)
@@ -48,11 +48,11 @@ int		read_next_line(const int fd, char **line, char *buf)
 
 	tmp = ft_strchr(buf, '\n');
 	len = 1;
-	while (buf && !tmp && len && len != -1)
+	while (!tmp && len && len != -1)
 	{
 		len = read(fd, buf, BUFF_SIZE);
 		tmp = ft_strchr(buf, '\n');
-		*line = ft_strappend(*line, buf);
+		ft_strappend(line, buf);
 		buf[len] = '\0';
 	}
 	if (len == -1 || (!len && !tmp) || !buf)
@@ -60,8 +60,6 @@ int		read_next_line(const int fd, char **line, char *buf)
 	ft_memmove(buf, tmp + 1, ft_strlen(tmp));
 	tmp = ft_strchr(*line, '\n');
 	*tmp = '\0';
-ft_putstr("rnl -->");
-ft_putendl(buf);
 	return (1);
 }
 
@@ -71,8 +69,9 @@ int		get_next_line(const int fd, char **line)
 	static t_list	*list = NULL;
 	t_list			*tmp;
 
+	if (fd < 0 || !line)
+		return (-1);
 	*line = ft_strnew(1);
-ft_putendl("get_buf");
 	buf = get_buf(fd, list);
 	if (!buf)
 	{
