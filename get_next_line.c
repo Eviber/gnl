@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 12:52:57 by ygaude            #+#    #+#             */
-/*   Updated: 2017/01/08 23:06:51 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/01/08 23:59:27 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,7 @@ t_list	*get_buf(const int fd, t_list *list)
 	while (list)
 	{
 		if ((int)list->content_size == fd)
-		{
 			return (list);
-		}
 		list = list->next;
 	}
 	return (NULL);
@@ -45,22 +43,22 @@ int		read_next_line(const int fd, char **line, char *buf)
 {
 	ssize_t		len;
 	char		*tmp;
+	int			check;
 
+	check = 0;
 	tmp = ft_strchr(buf, '\n');
 	len = 1;
-	if (tmp)
-	{
-		ft_strappend(line, buf);
-	}
 	ft_strappend(line, buf);
 	while (!tmp && len && len != -1)
 	{
 		len = read(fd, buf, BUFF_SIZE);
+		if (len)
+			check = 1;
 		tmp = ft_strchr(buf, '\n');
 		ft_strappend(line, buf);
 		buf[len] = '\0';
 	}
-	if (len == -1 || (!len && !tmp) || !buf)
+	if (len == -1 || (!len && !check) || !buf)
 		return ((!buf) ? -1 : len);
 	ft_memmove(buf, tmp + 1, ft_strlen(tmp));
 	tmp = ft_strchr(*line, '\n');
@@ -73,7 +71,7 @@ int		get_next_line(const int fd, char **line)
 	char			*buf;
 	static t_list	*list = NULL;
 	t_list			*tmp;
-	int				lol;
+	int				ret;
 
 	if (fd < 0 || !line)
 		return (-1);
@@ -90,7 +88,7 @@ int		get_next_line(const int fd, char **line)
 			return (-1);
 		ft_lstadd(&list, tmp);
 	}
-	lol = read_next_line(fd, line, buf);
+	ret = read_next_line(fd, line, buf);
 	tmp->content = buf;
-	return (lol);
+	return (ret);
 }
