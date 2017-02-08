@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 12:52:57 by ygaude            #+#    #+#             */
-/*   Updated: 2017/01/31 21:11:16 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/02/07 19:24:06 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,6 @@
 #include <unistd.h>
 #include "get_next_line.h"
 #include "libft/libft.h"
-
-void	ft_strappend(char **s1, char *s2)
-{
-	char	*tmp;
-
-	if (!*s1 || !s2)
-		return ;
-	tmp = ft_strjoin(*s1, s2);
-	ft_strdel(s1);
-	*s1 = tmp;
-}
 
 t_list	*get_buf(const int fd, t_list *list)
 {

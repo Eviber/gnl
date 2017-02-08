@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 00:09:48 by ygaude            #+#    #+#             */
-/*   Updated: 2016/11/28 14:23:14 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/02/07 19:23:04 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void				ft_putnbr(int n);
 void				ft_putnbr_fd(int n, int fd);
 void				ft_putstr(const char *s);
 void				ft_putstr_fd(const char *s, int fd);
+void				ft_strappend(char **s1, char *s2);
 char				*ft_strcat(char *s1, char *s2);
 char				*ft_strchr(const char *s, int c);
 void				ft_strclr(char *s);
