@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 12:52:57 by ygaude            #+#    #+#             */
-/*   Updated: 2017/02/07 19:24:06 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/02/09 18:10:09 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,32 @@
 #include "get_next_line.h"
 #include "libft/libft.h"
 
-t_list	*get_buf(const int fd, t_list *list)
+static void		delnode(t_list **lst, int fd)
+{
+	t_list	*cur;
+	t_list	*tmp;
+
+	cur = *lst;
+	if (cur->content_size == (size_t)fd)
+	{
+		*lst = (*lst)->next;
+		ft_strdel((char **)&(cur->content));
+		ft_memdel((void **)&cur);
+	}
+	while (cur)
+	{
+		tmp = cur;
+		cur = cur->next;
+		if (cur->content_size == (size_t)fd)
+		{
+			tmp->next = cur->next;
+			ft_strdel((char **)&(cur->content));
+			ft_memdel((void **)&cur);
+		}
+	}
+}
+
+static t_list	*get_buf(const int fd, t_list *list)
 {
 	while (list)
 	{
@@ -28,7 +53,7 @@ t_list	*get_buf(const int fd, t_list *list)
 	return (NULL);
 }
 
-int		read_next_line(const int fd, char **line, char *buf)
+static int		read_next_line(const int fd, char **line, char *buf)
 {
 	ssize_t		len;
 	char		*tmp;
@@ -57,7 +82,7 @@ int		read_next_line(const int fd, char **line, char *buf)
 	return (1);
 }
 
-int		get_next_line(const int fd, char **line)
+int				get_next_line(const int fd, char **line)
 {
 	char			*buf;
 	static t_list	*list = NULL;
