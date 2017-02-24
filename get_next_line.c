@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 12:52:57 by ygaude            #+#    #+#             */
-/*   Updated: 2017/02/09 18:10:09 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/02/24 17:40:01 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,5 +106,10 @@ int				get_next_line(const int fd, char **line)
 	}
 	ret = read_next_line(fd, line, buf);
 	tmp->content = buf;
+	if (!ft_strlen(tmp->content))
+	{
+		ft_putendl_fd("DELNODE", 2);
+		delnode(&list, fd);
+	}
 	return (ret);
 }

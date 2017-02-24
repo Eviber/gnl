@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/07 18:57:39 by ygaude            #+#    #+#             */
-/*   Updated: 2017/02/09 16:43:03 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/02/24 17:40:49 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,5 @@ int		main(void)
 
 	get_next_line(fd, &line);
 	close(fd);
-	sleep(15);
 	return (0);
 }
