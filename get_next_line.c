@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 12:52:57 by ygaude            #+#    #+#             */
-/*   Updated: 2017/02/24 17:40:01 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/02/24 21:13:54 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,31 +16,6 @@
 #include <unistd.h>
 #include "get_next_line.h"
 #include "libft/libft.h"
-
-static void		delnode(t_list **lst, int fd)
-{
-	t_list	*cur;
-	t_list	*tmp;
-
-	cur = *lst;
-	if (cur->content_size == (size_t)fd)
-	{
-		*lst = (*lst)->next;
-		ft_strdel((char **)&(cur->content));
-		ft_memdel((void **)&cur);
-	}
-	while (cur)
-	{
-		tmp = cur;
-		cur = cur->next;
-		if (cur->content_size == (size_t)fd)
-		{
-			tmp->next = cur->next;
-			ft_strdel((char **)&(cur->content));
-			ft_memdel((void **)&cur);
-		}
-	}
-}
 
 static t_list	*get_buf(const int fd, t_list *list)
 {
@@ -93,7 +68,7 @@ int				get_next_line(const int fd, char **line)
 		return (-1);
 	*line = ft_strnew(0);
 	tmp = get_buf(fd, list);
-	buf = tmp ? (char *)tmp->content : NULL;
+	buf = tmp ? ft_strdup((char *)tmp->content) : NULL;
 	if (!buf)
 	{
 		buf = ft_strnew(BUFF_SIZE + 1);
@@ -105,11 +80,7 @@ int				get_next_line(const int fd, char **line)
 		ft_lstadd(&list, tmp);
 	}
 	ret = read_next_line(fd, line, buf);
+	ft_memdel(&(tmp->content));
 	tmp->content = buf;
-	if (!ft_strlen(tmp->content))
-	{
-		ft_putendl_fd("DELNODE", 2);
-		delnode(&list, fd);
-	}
 	return (ret);
 }
