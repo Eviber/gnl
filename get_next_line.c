@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 14:16:47 by ygaude            #+#    #+#             */
-/*   Updated: 2017/04/20 19:35:23 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/04/23 19:33:01 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,53 +22,43 @@ int		read_nl(const int fd, char **res, char **buf)
 	int		ret;
 	char	*tmp;
 
+	ret = 1;
 	tmp = NULL;
-//	while (!tmp && (ret = read(fd, *buf, 5)))
+	if (*buf && **buf)
+		*res = ft_strdup(*buf);
+	tmp = (*res) ? ft_strchr(*res, '\n') : NULL;
+	while (!tmp && (ret = read(fd, *buf, BUFF_SIZE)))
 	{
 		if (ret == -1)
 			return (-1);
 		{
-			tmp = ft_strjoin(*res, *buf);
+			tmp = (*res) ? ft_strjoin(*res, *buf) : ft_strdup(*buf);
 			if (*res)
 				free(*res);
 			*res = tmp;
 		}
-		tmp = ft_strchr(*res, '\n');
+		tmp = NULL;
+		tmp = (*res) ? ft_strchr(*res, '\n') : NULL;
 	}
+	tmp = ft_strchr(*buf, '\n');
+	if (tmp)
+		*buf = ft_strsub(*buf, tmp - *buf + 1, ft_strlen(tmp));
+	tmp = (*res) ? ft_strchr(*res, '\n') : NULL;
+	if (tmp)
+		*tmp = '\0';
 	return (ret);
-/*
-	int		ret;
-	char	*tmp;
-	char	*line_buf;
-
-	line_buf = ft_strdup(*buf);
-	tmp = ft_strchr(line_buf, '\n');
-	if (!(!tmp && (ret = read(fd, *buf, BUFF_SIZE))))
-	{
-		if (ret == -1)
-			return (-1);
-		ft_strappend(&line_buf, *buf);
-		tmp = ft_strchr(line_buf, '\n');
-	}
-	*res = ft_strsub(line_buf, 0, (size_t)(tmp - line_buf));
-	tmp = ft_strsub(tmp, 0, ft_strlen(tmp));
-	ft_strdel(&line_buf);
-	*buf = tmp;
-	return (ret || ft_strlen(*buf));
-*/
 }
 
 int		get_next_line(const int fd, char **line)
 {
 	static char	*buf = NULL;
 	int			res;
+
+	*line = NULL;
 	if (!buf)
 		buf = (char *)malloc(sizeof(char) * BUFF_SIZE + 1);
 	if (!buf)
 		return (-1);
 	res = read_nl(fd, line, &buf);
-	ft_putstr(buf);
-//	ft_putstr("--->");
-//	ft_putendl(*line);
 	return (res);
 }

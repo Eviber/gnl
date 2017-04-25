@@ -6,14 +6,14 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/04 15:16:22 by ygaude            #+#    #+#             */
-/*   Updated: 2017/04/17 17:35:04 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/04/23 18:40:51 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# define BUFF_SIZE 8
+# define BUFF_SIZE 5
 
 int		get_next_line(const int fd, char **line);
 
