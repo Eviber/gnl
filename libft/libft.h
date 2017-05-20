@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/07 00:09:48 by ygaude            #+#    #+#             */
-/*   Updated: 2017/02/07 19:23:04 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/05/20 23:15:09 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void				ft_putnbr(int n);
 void				ft_putnbr_fd(int n, int fd);
 void				ft_putstr(const char *s);
 void				ft_putstr_fd(const char *s, int fd);
-void				ft_strappend(char **s1, char *s2);
+char				*ft_strappend(char **s1, char **s2, char c);
 char				*ft_strcat(char *s1, char *s2);
 char				*ft_strchr(const char *s, int c);
 void				ft_strclr(char *s);
@@ -70,7 +70,6 @@ void				ft_striteri(char *s, void (*f)(unsigned int, char *));
 char				*ft_strjoin(const char *s1, const char *s2);
 size_t				ft_strlcat(char *s1, char *s2, size_t n);
 size_t				ft_strlen(const char *str);
-size_t				ft_strnlen(const char *str, size_t size);
 char				*ft_strmap(const char *s, char (*f)(char));
 char				*ft_strmapi(const char *s, char (*f)(unsigned int, char));
 char				*ft_strncat(char *s1, char *s2, size_t n);
@@ -78,6 +77,7 @@ int					ft_strncmp(const char *s1, const char *s2, size_t n);
 char				*ft_strncpy(char *dst, const char *src, size_t len);
 int					ft_strnequ(const char *s1, const char *s2, size_t n);
 char				*ft_strnew(size_t size);
+size_t				ft_strnlen(char *str, size_t size);
 char				*ft_strnstr(const char *big, const char *small, size_t len);
 char				*ft_strrchr(const char *s, int c);
 char				**ft_strsplit(const char *s, char c);

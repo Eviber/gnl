@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 14:16:47 by ygaude            #+#    #+#             */
-/*   Updated: 2017/04/23 19:33:01 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/05/20 23:34:10 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,48 +17,31 @@
 #include "get_next_line.h"
 #include "libft/libft.h"
 
-int		read_nl(const int fd, char **res, char **buf)
-{
-	int		ret;
-	char	*tmp;
-
-	ret = 1;
-	tmp = NULL;
-	if (*buf && **buf)
-		*res = ft_strdup(*buf);
-	tmp = (*res) ? ft_strchr(*res, '\n') : NULL;
-	while (!tmp && (ret = read(fd, *buf, BUFF_SIZE)))
-	{
-		if (ret == -1)
-			return (-1);
-		{
-			tmp = (*res) ? ft_strjoin(*res, *buf) : ft_strdup(*buf);
-			if (*res)
-				free(*res);
-			*res = tmp;
-		}
-		tmp = NULL;
-		tmp = (*res) ? ft_strchr(*res, '\n') : NULL;
-	}
-	tmp = ft_strchr(*buf, '\n');
-	if (tmp)
-		*buf = ft_strsub(*buf, tmp - *buf + 1, ft_strlen(tmp));
-	tmp = (*res) ? ft_strchr(*res, '\n') : NULL;
-	if (tmp)
-		*tmp = '\0';
-	return (ret);
-}
-
 int		get_next_line(const int fd, char **line)
 {
-	static char	*buf = NULL;
-	int			res;
+	//static t_list	*catalog = NULL;
+	//t_list			*cur;
+	static char			*buf;
+	char				*tmp;
+	int					ret;
 
-	*line = NULL;
 	if (!buf)
-		buf = (char *)malloc(sizeof(char) * BUFF_SIZE + 1);
-	if (!buf)
+		buf = (char *)malloc(sizeof(char) * (BUFF_SIZE + 1));
+	if (!buf || !line || fd < 0 || read(fd, buf, 0) < 0)
 		return (-1);
-	res = read_nl(fd, line, &buf);
-	return (res);
+	// get_fd
+	ret = 1;
+	tmp = ft_strnew(0);
+	tmp = ft_strjoin(tmp, buf);
+	while (!ft_strchr(tmp, '\n') && (ret = read(fd, buf, BUFF_SIZE)) > 0)
+	{
+		tmp = ft_strappend(&tmp, (char **)&buf, 'F');
+	}
+	if (ret == -1)
+		return (-1);
+	*line = ft_strsub(tmp, 0, (size_t)(ft_strchr(tmp, '\n') - tmp));
+	ft_strclr(buf);
+	if (ft_strchr(tmp, '\n'))
+		ft_strcpy(buf, (ft_strchr(tmp, '\n') + 1));
+	return ((ret) ? 1 : 0);
 }
