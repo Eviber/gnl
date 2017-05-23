@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 14:16:47 by ygaude            #+#    #+#             */
-/*   Updated: 2017/05/20 23:34:10 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/05/23 18:47:23 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,25 @@ int		get_next_line(const int fd, char **line)
 	//t_list			*cur;
 	static char			*buf;
 	char				*tmp;
-	int					ret;
+	ssize_t				ret;
 
 	if (!buf)
 		buf = (char *)malloc(sizeof(char) * (BUFF_SIZE + 1));
 	if (!buf || !line || fd < 0 || read(fd, buf, 0) < 0)
 		return (-1);
 	// get_fd
+	if (*line)
+		ft_strclr(*line);
 	ret = 1;
-	tmp = ft_strnew(0);
-	tmp = ft_strjoin(tmp, buf);
+	tmp = ft_strdup(buf);
 	while (!ft_strchr(tmp, '\n') && (ret = read(fd, buf, BUFF_SIZE)) > 0)
-	{
 		tmp = ft_strappend(&tmp, (char **)&buf, 'F');
-	}
 	if (ret == -1)
 		return (-1);
-	*line = ft_strsub(tmp, 0, (size_t)(ft_strchr(tmp, '\n') - tmp));
+	if (ft_strchr(tmp, '\n'))
+		*line = ft_strsub(tmp, 0, (size_t)(ft_strchr(tmp, '\n') - tmp));
 	ft_strclr(buf);
 	if (ft_strchr(tmp, '\n'))
 		ft_strcpy(buf, (ft_strchr(tmp, '\n') + 1));
-	return ((ret) ? 1 : 0);
+	return ((ret || ft_strlen(*line)) ? 1 : 0);
 }
