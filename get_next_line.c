@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 14:16:47 by ygaude            #+#    #+#             */
-/*   Updated: 2017/05/31 16:46:44 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/05/31 19:59:03 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "get_next_line.h"
 #include "libft/libft.h"
 
-char	*getbuf(const int fd)
+static char	*getbuf(const int fd)
 {
 	static t_list	*catalog = NULL;
 	t_list			*cur;
@@ -32,9 +32,9 @@ char	*getbuf(const int fd)
 		cur = cur->next;
 	if ((int)cur->content_size - 1 != fd)
 	{
-		if(!(res = ft_strnew(BUFF_SIZE)))
+		if (!(res = ft_strnew(BUFF_SIZE)))
 			return (NULL);
-		ft_lstaddend(&catalog, ft_lstnew((const void *)res, fd + 1));
+		ft_lstaddend(&catalog, ft_lstnew((const void *)res, (size_t)(fd + 1)));
 		cur = cur->next;
 	}
 	res = (char *)cur->content;
@@ -47,6 +47,7 @@ int		get_next_line(const int fd, char **line)
 	char				*tmp;
 	ssize_t				ret;
 
+	ret = 0;
 	buf = getbuf(fd);
 	if (!buf || !line || fd < 0 || read(fd, buf, 0) < 0)
 		return (-1);
