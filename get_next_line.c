@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 14:16:47 by ygaude            #+#    #+#             */
-/*   Updated: 2017/05/31 01:58:21 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/05/31 16:46:44 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ char	*getbuf(const int fd)
 	if (!catalog)
 		return (NULL);
 	cur = catalog;
-	while ((int)cur->content_size != fd && cur->next)
+	while ((int)cur->content_size - 1 != fd && cur->next)
 		cur = cur->next;
-	if ((int)cur->content_size != fd)
+	if ((int)cur->content_size - 1 != fd)
 	{
 		if(!(res = ft_strnew(BUFF_SIZE)))
 			return (NULL);
-		ft_lstaddend(&catalog, ft_lstnew((const void *)res, fd));
+		ft_lstaddend(&catalog, ft_lstnew((const void *)res, fd + 1));
+		cur = cur->next;
 	}
-	else
-		res = (char *)cur->content;
+	res = (char *)cur->content;
 	return (res);
 }
 
@@ -58,7 +58,10 @@ int		get_next_line(const int fd, char **line)
 		tmp = ft_strappend(&tmp, &buf, 'F');
 	}
 	if (ret == -1)
+	{
+		ft_putendl("read error");
 		return (-1);
+	}
 	*line = ft_strsub(tmp, 0, (ft_strchr(tmp, '\n')) ?
 		((size_t)(ft_strchr(tmp, '\n') - tmp)) : ft_strlen(tmp));
 	ft_strclr(buf);
