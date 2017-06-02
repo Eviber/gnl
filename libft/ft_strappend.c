@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/07 19:20:31 by ygaude            #+#    #+#             */
-/*   Updated: 2017/05/20 23:16:21 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/06/02 04:41:42 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,5 @@ char				*ft_strappend(char **s1, char **s2, char c)
 		ft_strdel(s1);
 	if (c == 'S' || c == 'B')
 		ft_strdel(s2);
-	return(tmp);
+	return (tmp);
 }
