@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 14:16:47 by ygaude            #+#    #+#             */
-/*   Updated: 2017/06/02 08:36:53 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/06/02 16:17:14 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,21 @@
 #include "get_next_line.h"
 #include "libft/libft.h"
 
-static char	*getbuf(const int fd)
+static char	*getbuf(const int fd, int delplz)
 {
 	static t_list	*catalog = NULL;
 	t_list			*cur;
 	char			*res;
 
+if (delplz)
+	ft_putendl("DELPLZ");
 	if (!catalog)
 		if (!(catalog = (t_list *)ft_memalloc(sizeof(t_list))))
 			return (NULL);
 	cur = catalog;
-	while ((int)cur->content_size != fd && cur->next)
+	while (cur->content_size != (size_t)fd && cur->next)
 		cur = cur->next;
-	if ((int)cur->content_size != fd)
+	if (cur->content_size != (size_t)fd && !delplz)
 	{
 		if (!(res = ft_strnew(BUFF_SIZE)))
 			return (NULL);
@@ -38,7 +40,9 @@ static char	*getbuf(const int fd)
 		cur = cur->next;
 		cur->content_size = (size_t)fd;
 	}
-	res = (char *)cur->content;
+	if (cur->content_size == (size_t)fd && delplz)
+		ft_lstdelthis(&catalog, cur);
+	res = (cur) ? (char *)cur->content : NULL;
 	return (res);
 }
 
@@ -49,7 +53,7 @@ int			get_next_line(const int fd, char **line)
 	ssize_t				ret;
 
 	ret = 1;
-	buf = getbuf(fd);
+	buf = getbuf(fd + 1, 0);
 	if (!buf || !line || fd < 0 || read(fd, buf, 0) < 0)
 		return (-1);
 	*line = NULL;
@@ -59,15 +63,14 @@ int			get_next_line(const int fd, char **line)
 		buf[ret] = '\0';
 		tmp = ft_strappend(&tmp, &buf, 'F');
 	}
-	if (!tmp || ret == -1)
-		return (-1);
-	if (!(*line = ft_strsub(tmp, 0, (ft_strchr(tmp, '\n')) ?
-		((size_t)(ft_strchr(tmp, '\n') - tmp)) : ft_strlen(tmp))))
+	if ((!tmp || ret == -1) || !(*line = ft_strsub(tmp, 0, (ft_strchr(tmp,
+		'\n')) ? ((size_t)(ft_strchr(tmp, '\n') - tmp)) : ft_strlen(tmp))))
 		return (-1);
 	ft_strclr(buf);
 	if (ft_strchr(tmp, '\n'))
 		ft_strcpy(buf, (ft_strchr(tmp, '\n') + 1));
-	free(tmp);
-	tmp = NULL;
+	ft_strdel(&tmp);
+	if (!(ret || ft_strlen(buf) || ft_strlen(*line)))
+		getbuf(fd, 1);
 	return ((ret || ft_strlen(buf) || ft_strlen(*line)) ? 1 : 0);
 }
