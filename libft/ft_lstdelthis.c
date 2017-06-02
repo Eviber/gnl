@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 15:21:57 by ygaude            #+#    #+#             */
-/*   Updated: 2017/06/02 16:13:05 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/06/02 21:14:47 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	ft_lstdelthis(t_list **alst, t_list *target)
 	t_list	*cur;
 	t_list	*tmp;
 
-ft_putendl("DELTHIS");
 	if (!alst || !*alst || !target)
 		return ;
 	cur = *alst;

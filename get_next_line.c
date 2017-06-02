@@ -6,7 +6,7 @@
 /*   By: ygaude <ygaude@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/15 14:16:47 by ygaude            #+#    #+#             */
-/*   Updated: 2017/06/02 16:17:14 by ygaude           ###   ########.fr       */
+/*   Updated: 2017/06/02 21:15:24 by ygaude           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ static char	*getbuf(const int fd, int delplz)
 	t_list			*cur;
 	char			*res;
 
-if (delplz)
-	ft_putendl("DELPLZ");
 	if (!catalog)
 		if (!(catalog = (t_list *)ft_memalloc(sizeof(t_list))))
 			return (NULL);
@@ -71,6 +69,6 @@ int			get_next_line(const int fd, char **line)
 		ft_strcpy(buf, (ft_strchr(tmp, '\n') + 1));
 	ft_strdel(&tmp);
 	if (!(ret || ft_strlen(buf) || ft_strlen(*line)))
-		getbuf(fd, 1);
+		getbuf(fd + 1, 1);
 	return ((ret || ft_strlen(buf) || ft_strlen(*line)) ? 1 : 0);
 }
